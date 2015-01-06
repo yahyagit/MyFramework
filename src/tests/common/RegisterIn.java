@@ -19,6 +19,7 @@ public class RegisterIn extends BaseTests {
     @BeforeClass
     public void setUpClass() {
 
+
     }
 
     @Test
