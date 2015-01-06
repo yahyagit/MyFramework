@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE elementsMap [
+        <!ELEMENT elementsMap (pageMap)*>
+        <!ELEMENT pageMap (pageElement)*>
+        <!ATTLIST pageMap
+                name CDATA #REQUIRED>
+        <!ELEMENT pageElement (#PCDATA)>
+        <!ATTLIST pageElement
+                by CDATA #REQUIRED
+                fullname CDATA #IMPLIED
+                locator CDATA #REQUIRED
+                name CDATA #REQUIRED>
+        ]>
+
+<elementsMap>
+    <!-- Example
+     <pageMap name="ui.dialogs.savedialogs.SaveInputControlsValuesDialog">
+        <pageElement name="savedValuesNameInput" by="css" locator="#savedValuesName" fullname="Saved Values Name"/>
+        <pageElement name="saveButton" by="css" locator="#saveValues #saveAsBtnSave"/>
+        <pageElement name="cancelButton" by="css" locator="#saveValues #saveAsBtnCancel"/>
+    </pageMap>
+    -->
+</elementsMap>
