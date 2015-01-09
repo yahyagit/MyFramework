@@ -13,6 +13,10 @@
         ]>
 
 <elementsMap>
+    <pageMap name="ui.pages.GoogleMainPage">
+        <pageElement name="searchField" by="xpath" locator="//input[@id='text']" fullname="Search Field"/>
+        <pageElement name="searchButton" by="xpath" locator="//button" fullname="Search Button"/>
+    </pageMap>
     <!-- Example
      <pageMap name="ui.dialogs.savedialogs.SaveInputControlsValuesDialog">
         <pageElement name="savedValuesNameInput" by="css" locator="#savedValuesName" fullname="Saved Values Name"/>

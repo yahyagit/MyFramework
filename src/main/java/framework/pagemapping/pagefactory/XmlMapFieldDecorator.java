@@ -1,7 +1,5 @@
 package framework.pagemapping.pagefactory;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
@@ -12,7 +10,6 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
-import ui.elements.common.ERPCommonElement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -30,7 +27,6 @@ public class XmlMapFieldDecorator implements FieldDecorator {
 
     public Object decorate(ClassLoader loader, Field field) {
         if (!(WebElement.class.isAssignableFrom(field.getType()) ||
-                ERPCommonElement.class.isAssignableFrom(field.getType()) ||
                 isDecoratableList(field))) {
             return null;
         }
@@ -42,17 +38,12 @@ public class XmlMapFieldDecorator implements FieldDecorator {
 
         if (WebElement.class.isAssignableFrom(field.getType())) {
             return proxyForLocator(loader, locator);
-        } else if (ERPCommonElement.class.isAssignableFrom(field.getType())) {
-            return transformToERPElement(proxyForLocator(loader, locator), field);
-        } else if (List.class.isAssignableFrom(field.getType())) {
+        }else if (List.class.isAssignableFrom(field.getType())) {
             if (WebElement.class.equals(getTypeOfGenericField(field))) {
                 return proxyForListLocator(loader, locator);
-            } else {
-                return transformToERPElementList(proxyForListLocator(loader, locator), field);
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     private boolean isDecoratableList(Field field) {
@@ -66,8 +57,7 @@ public class XmlMapFieldDecorator implements FieldDecorator {
         }
 
         Type listType = getTypeOfGenericField(field);
-        if (!(WebElement.class.equals(listType) ||
-                ERPCommonElement.class.equals(getClassFromGenericField(listType).getSuperclass()))) {
+        if (!(WebElement.class.equals(listType))) {
             return false;
         }
 
@@ -94,37 +84,6 @@ public class XmlMapFieldDecorator implements FieldDecorator {
         proxy = (List<WebElement>) Proxy.newProxyInstance(
                 loader, new Class[] {List.class}, handler);
         return proxy;
-    }
-
-    private ERPCommonElement transformToERPElement(WebElement wrappedElement, Field field) {
-        return getERPElement(getFullNameFromMap(field), field.getType().asSubclass(ERPCommonElement.class), wrappedElement);
-    }
-
-    private List<ERPCommonElement> transformToERPElementList(List<WebElement> wrappedElementList, Field field) {
-        final String fullname = getFullNameFromMap(field);
-        final Class clazz = getClassFromGenericField(field);
-        return Lists.transform(wrappedElementList, new Function<WebElement, ERPCommonElement>() {
-            @Override
-            public ERPCommonElement apply(WebElement input) {
-                return getERPElement(fullname, clazz, input);
-            }
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    private ERPCommonElement getERPElement(String fullname, Class clazz, WebElement wrappedElement) {
-        Object result;
-        try {
-            if (fullname == null) {
-                result = clazz.getConstructor(WebElement.class).newInstance(wrappedElement);
-            } else {
-                result = clazz.getConstructor(WebElement.class, String.class).newInstance(wrappedElement, fullname);
-            }
-            return (ERPCommonElement) result;
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException("Something wrong in decorator");
     }
 
     private String getFullNameFromMap(Field field) {

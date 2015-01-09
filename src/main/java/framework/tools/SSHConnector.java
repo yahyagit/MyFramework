@@ -3,14 +3,21 @@ package framework.tools;
 import ch.ethz.ssh2.ChannelCondition;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.Session;
-import framework.data.PropertiesReader;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class SSHConnector {
-    private String host = PropertiesReader.getInstance().getSshHost();
-    private String username = PropertiesReader.getInstance().getSshLogin();
-    private String password = PropertiesReader.getInstance().getSshPassword();
+    private String host;
+//    = PropertiesReader.getInstance().getSshHost();
+    private String username;
+//    = PropertiesReader.getInstance().getSshLogin();
+    private String password;
+//    = PropertiesReader.getInstance().getSshPassword();
     private OutputStreamWriter writer = null;
     private Connection conn = null;
     private Session sess = null;

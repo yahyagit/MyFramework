@@ -23,7 +23,7 @@ import static utils.ActionUtils.getBaseUrl;
  * Created by apaliy on 12/4/2014.
  */
 @Listeners({RetryListener.class, SoftAssertListener.class})
-public abstract class BaseTests {
+public abstract class BaseTest {
     @BeforeSuite(alwaysRun = true)
     public void setUpSuite(ITestContext context) {
         initReporter();
