@@ -8,6 +8,15 @@
     <artifactId>MyFramework</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <seleniumVersion>2.44.0</seleniumVersion>
+        <suiteDir>${basedir}/src/test/suites</suiteDir>
+        <suite>${suiteDir}/test_suite.xml</suite>
+        <testOutputDir>${basedir}/target/test-output</testOutputDir>
+    </properties>
+
+    <build></build>
+
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
