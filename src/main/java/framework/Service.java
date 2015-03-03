@@ -7,6 +7,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -113,11 +114,23 @@ public final class Service {
     }
 
     private FirefoxDriver getFirefoxDriver() {
+        String pathToBinary = properties.getFirefoxBinaryPath();
         String profileFileName = properties.getFirefoxProfilePath();
-        if (profileFileName.equals("")) {
-            return new FirefoxDriver();
+        if (pathToBinary == null || "".equals(pathToBinary)) {
+            if (profileFileName == null || "".equals(profileFileName)) {
+                return new FirefoxDriver();
+            } else {
+                return new FirefoxDriver(new FirefoxProfile(new File(profileFileName)));
+            }
         } else {
-            return new FirefoxDriver(new FirefoxProfile(new File(profileFileName)));
+            FirefoxBinary firefoxBinary = new FirefoxBinary(new File(pathToBinary));
+            if (profileFileName == null || "".equals(profileFileName)) {
+                DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
+                desiredCapabilities.setCapability("firefox_binary", pathToBinary);
+                return new FirefoxDriver(desiredCapabilities);
+            } else {
+                return new FirefoxDriver(firefoxBinary, new FirefoxProfile(new File(profileFileName)));
+            }
         }
     }
 

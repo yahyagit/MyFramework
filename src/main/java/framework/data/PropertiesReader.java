@@ -54,6 +54,10 @@ public class PropertiesReader {
         return properties.getProperty("system.firefox_profile_path");
     }
 
+    public String getFirefoxBinaryPath() {
+        return properties.getProperty("system.firefox_binary_path");
+    }
+
     public boolean isTracingEnable() {
         return Boolean.parseBoolean(properties.getProperty("system.tracing_enable"));
     }
@@ -72,18 +76,6 @@ public class PropertiesReader {
 
     public String getDownloadDirPath() {
         return properties.getProperty("tests.download_dir_path");
-    }
-
-    public String getDownloadDeliveryPath() {
-        return properties.getProperty("tests.download_delivery_path");
-    }
-
-    public String getLocalDeliveryPath() {
-        return properties.getProperty("tests.local_delivery_path");
-    }
-
-    public boolean isLocalEnvironment() {
-        return !getBaseURL().contains("svanyc");
     }
 
     /*
@@ -214,17 +206,17 @@ public class PropertiesReader {
     Exchange mail
      */
 
-//    public String getExchangeURL() {
-//        return properties.getProperty("exchange.url");
-//    }
-//
-//    public String getExchangeUserName() {
-//        return properties.getProperty("exchange.user.name");
-//    }
-//
-//    public String getExchangePassword() {
-//        return properties.getProperty("exchange.password");
-//    }
+    public String getExchangeURL() {
+        return properties.getProperty("exchange.url");
+    }
+
+    public String getExchangeUserName() {
+        return properties.getProperty("exchange.user.name");
+    }
+
+    public String getExchangePassword() {
+        return properties.getProperty("exchange.password");
+    }
 
     /*
     PRIVATES

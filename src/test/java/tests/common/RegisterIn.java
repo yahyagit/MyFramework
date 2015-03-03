@@ -1,5 +1,6 @@
 package tests.common;
 
+import framework.Service;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 import ui.pages.GoogleMainPage;
@@ -15,7 +16,7 @@ public class RegisterIn extends BaseTest {
     @Test
     public void test() throws InterruptedException {
 
-        GoogleMainPage googleMainPage = new GoogleMainPage();
+        GoogleMainPage googleMainPage = new GoogleMainPage(Service.getInstance().getCurrentDriver());
         googleMainPage.setSearchField("Rozetka");
         googleMainPage.clickSearchButton();
         WaitUtils.sleep(10);

@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 
-/**
- * Created by apaliy on 12/8/2014.
- */
 public class MailClient {
     private static final String SSL = "ssl";
     private static final String TLS = "tls";
@@ -48,14 +45,42 @@ public class MailClient {
     private String userMail;
     private String password;
 
+    public MailClient(String smtpServer, int smtpPort, String imapServer, int imapPort,
+                      String securityProtocol, String userMail, String password) {
+        this.userMail = userMail;
+        this.password = password;
+        this.smtpServer = smtpServer;
+        this.smtpPort = smtpPort;
+        this.imapServer = imapServer;
+        this.imapPort = imapPort;
+        this.securityProtocol = securityProtocol;
+    }
+
+    public MailClient(String smtpServer, String imapServer,
+                      String securityProtocol, String userMail, String password) {
+        this.userMail = userMail;
+        this.password = password;
+        this.smtpServer = smtpServer;
+        this.imapServer = imapServer;
+        this.imapPort = 993;
+        this.securityProtocol = securityProtocol;
+        if (securityProtocol.equals(SSL)) {
+            this.smtpPort = 465;
+        } else if (securityProtocol.equals(TLS)) {
+            this.smtpPort = 587;
+        } else {
+            this.smtpPort = 25;
+        }
+    }
+
     public MailClient(String smtpServer, String imapServer, String userMail, String password) {
         this.userMail = userMail;
         this.password = password;
         this.smtpServer = smtpServer;
-        this.smtpPort = 465;
+        this.smtpPort = 25;
         this.imapServer = imapServer;
         this.imapPort = 993;
-        this.securityProtocol = "SSL/TLS";
+        this.securityProtocol = "";
     }
 
     public ArrayList<MailMessage> getAllMessagesFromFolder(String storeName) {
@@ -115,7 +140,7 @@ public class MailClient {
     private MailMessage getMailMessage(final Message message) throws MessagingException {
         MailMessage mailMessage = null;
         try {
-            mailMessage = new MailMessage(){{
+            mailMessage = new MailMessage() {{
                 setSubject(message.getSubject());
                 setSender(message.getFrom()[0].toString());
                 setDate(message.getReceivedDate());
@@ -123,10 +148,10 @@ public class MailClient {
             }};
         } catch (MessagingException e) {
             if (e.getMessage() != null && e.getMessage().toLowerCase().contains("unable to load bodystructure")) {
-                MimeMessage msgDownloaded = new MimeMessage((MimeMessage) message);
-                mailMessage = getMailMessage(msgDownloaded);
+                MimeMessage msgDowloaded = new MimeMessage((MimeMessage) message);
+                mailMessage = getMailMessage(msgDowloaded);
             } else {
-                throw e;
+                throw  e;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -146,7 +171,6 @@ public class MailClient {
                 text = (String) content;
             }
         } catch (MessagingException e) {
-
             e.printStackTrace();
         }
         return text;
@@ -156,7 +180,7 @@ public class MailClient {
         String text = "";
         try {
             if (part.isMimeType(MIME_TEXT)) {
-                text = (String) part.getContent();
+               text = (String) part.getContent();
             } else if (part.isMimeType(MIME_ALTERNATIVE) || part.isMimeType(MIME_MULTI_PART)) {
                 Multipart multipart = (Multipart) part.getContent();
                 for (int i = 0; i < multipart.getCount(); i++) {
